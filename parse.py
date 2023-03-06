@@ -1,24 +1,40 @@
-def serialize(word):
-    with open("bad_words.csv",'a+') as csv_file:
+def serialize(word, mode):
+    if mode == "bad_words":
+        file_name = mode + ".csv"
+    else:
+        file_name = mode +".csv"
+
+    with open(file_name, 'a+') as csv_file:
         csv_file.write(word + "\n")
 
 
-def deserialize():
-    with open("bad_words.csv","r") as f:
-        sub_words = f.readlines()
-        sub_words.remove("\n")
+def deserialize(mode):
+    if mode == "bad_words":
+        file_name = mode + ".csv"
 
-    words = map(lambda x:x.replace("\n",""),sub_words)
+        with open(file_name, "r") as f:
+            sub_words = f.readlines()
 
-    alphabet_dict = {}
+        words = map(lambda x: x.replace("\n", ""), sub_words)
 
-    for word in words:
-        if alphabet_dict.get(word[0],None):
-            alphabet_dict[word[0]].append(word)
-        else:
-            alphabet_dict[word[0]] = [word]
+        alphabet_dict = {}
 
-    return alphabet_dict
+        for word in words:
+            if alphabet_dict.get(word[0], None):
+                alphabet_dict[word[0]].append(word)
+            else:
+                alphabet_dict[word[0]] = [word]
+
+        return alphabet_dict
+    else:
+        file_name = mode +".csv"
+
+        with open(file_name,"r") as f:
+            exceptions = f.readlines()
+
+        exceptions = list(map(lambda x: x.replace("\n", ""), exceptions))
+
+        return exceptions
 
 
 def _to_default():
@@ -28,5 +44,4 @@ def _to_default():
     with open("bad_words.csv","w") as csv_file:
         for word in words_list:
             csv_file.write(word + "\n")
-
 
